@@ -24,7 +24,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api", router);
 mongoose
-  .connect(process.env.MONGO_URI!)
+  .connect(process.env.MONGO_URI!, {
+    tls: true,
+    tlsCAFile: "../global-bundle.pem"
+  })
   .then(() => console.log("[ MONGO ] Database connected"))
   .catch((error) => console.error("[ MONGO ] Database error:", error));
 //create superadmin account before starting//
