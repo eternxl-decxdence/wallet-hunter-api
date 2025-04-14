@@ -21,7 +21,10 @@ app.use(helmet());
 app.use(
   cors({
     origin: function (origin, callback) {
-      const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+      const allowedOrigins = [
+        "hhttps://main.d31ifa3l8vy54k.amplifyapp.com/",
+        "file://"
+      ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
