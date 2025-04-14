@@ -1,8 +1,12 @@
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
-import { User } from "../models/User.ts";
+import { Response, Request, NextFunction } from "express";
+import { Admin } from "../models/Admin.ts";
 
-export function authToken(req: Request, res: Response, next: NextFunction) {
+export async function authAdminToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token)
     return res.status(403).json({ error: "Access denied no token provided" });
@@ -15,10 +19,10 @@ export function authToken(req: Request, res: Response, next: NextFunction) {
         console.log(decoded, err);
         return res.status(401).json({ error: "Invalid or expired token" });
       }
-      const user = await User.findById((decoded as { _id: string })._id);
-      if (!user) return res.status(404).json({ error: "User not found" });
+      const admin = await Admin.findById((decoded as { _id: string })._id);
+      if (!admin) return res.status(404).json({ error: "Admin not found" });
 
-      req.user = user;
+      req.admin = admin;
       next();
     }
   );

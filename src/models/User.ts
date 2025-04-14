@@ -15,7 +15,7 @@ export interface IUser extends Document {
 const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  subscriptionExpirationDate: { type: Date, default: null },
+  subscriptionExpirationDate: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -51,10 +51,13 @@ UserSchema.methods.comparePassword = async function (password: string) {
 };
 
 UserSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET!, {
-    expiresIn: "1h"
-  });
+  const token = jwt.sign(
+    { _id: this._id, username: this.username },
+    process.env.JWT_ACCESS_TOKEN_SECRET!,
+    {
+      expiresIn: "1h"
+    }
+  );
   return token;
 };
-
 export const User = mongoose.model<IUser>("User", UserSchema);

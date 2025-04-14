@@ -1,5 +1,6 @@
 import app from "./app.ts";
 import dotenv from "dotenv";
+import { Admin } from "./models/Admin.ts";
 
 dotenv.config();
 
