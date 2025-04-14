@@ -26,7 +26,7 @@ app.use("/api", router);
 mongoose
   .connect(process.env.MONGO_URI!, {
     tls: true,
-    tlsCAFile: "../../global-bundle.pem"
+    tlsCAFile: "./global-bundle.pem"
   })
   .then(() => console.log("[ MONGO ] Database connected"))
   .catch((error) => console.error("[ MONGO ] Database error:", error));
