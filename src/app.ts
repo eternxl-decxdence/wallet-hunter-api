@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: function (origin, callback) {
       const allowedOrigins = [
-        "hhttps://main.d31ifa3l8vy54k.amplifyapp.com/",
+        "https://main.d31ifa3l8vy54k.amplifyapp.com",
         "file://"
       ];
       if (!origin || allowedOrigins.includes(origin)) {
