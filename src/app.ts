@@ -26,7 +26,13 @@ app.use(
     credentials: true
   })
 );
-app.options("*", cors());
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Указание разрешенного источника
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Разрешение методов
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Разрешение заголовков
+  res.header("Access-Control-Allow-Credentials", "true"); // Разрешение куков
+  return res.sendStatus(200); // Отправляем статус OK
+});
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", router);
