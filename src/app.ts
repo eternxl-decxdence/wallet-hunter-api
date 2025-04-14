@@ -5,6 +5,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import path from "path";
+
 dotenv.config();
 
 import router from "./routes/index.ts";
@@ -26,22 +28,23 @@ app.use("/api", router);
 mongoose
   .connect(process.env.MONGO_URI!, {
     tls: true,
-    tlsCAFile: "./global-bundle.pem"
+    tlsCAFile: path.join(__dirname, "./global-bundle.pem")
   })
-  .then(() => console.log("[ MONGO ] Database connected"))
+  .then(async () => {
+    console.log("[ MONGO ] Database connected");
+    const existingAdmin = await Admin.findOne({
+      username: "sudo",
+      role: "superadmin"
+    });
+    if (!existingAdmin) {
+      const admin = new Admin({
+        username: "sudo",
+        password: "superuserlogin123",
+        role: "superadmin"
+      });
+      await admin.save();
+    }
+  })
   .catch((error) => console.error("[ MONGO ] Database error:", error));
-//create superadmin account before starting//
 
-const existingAdmin = await Admin.findOne({
-  username: "sudo",
-  role: "superadmin"
-});
-if (!existingAdmin) {
-  const admin = new Admin({
-    username: "sudo",
-    password: "superuserlogin123",
-    role: "superadmin"
-  });
-  await admin.save();
-}
 export default app;
