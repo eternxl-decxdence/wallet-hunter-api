@@ -20,7 +20,7 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(
   cors({
-    origin: true,
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true
   })
 );
