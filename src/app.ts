@@ -20,19 +20,17 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: function (origin, callback) {
+      const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   })
 );
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Указание разрешенного источника
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Разрешение методов
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Разрешение заголовков
-  res.header("Access-Control-Allow-Credentials", "true"); // Разрешение куков
-  return res.sendStatus(200); // Отправляем статус OK
-});
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", router);
