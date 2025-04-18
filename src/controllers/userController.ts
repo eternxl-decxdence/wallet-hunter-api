@@ -135,12 +135,12 @@ export async function updateUser(req: Request, res: Response) {
   const { username, subscriptionDays, password } = req.body;
   try {
     const update: any = {};
-    if (subscriptionDays !== undefined) {
+    if (subscriptionDays !== "") {
       update.subscriptionExpirationDate = new Date(
         Date.now() + parseInt(subscriptionDays) * 24 * 60 * 60 * 1000
       );
     }
-    if (password !== undefined) {
+    if (password !== "") {
       const salt = await bcrypt.genSalt(10);
       update.password = await bcrypt.hash(password, salt);
     }
